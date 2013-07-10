@@ -3,7 +3,12 @@ require 'rubygems'
 require 'mechanize'
 require 'logger'
 
-def connect_to_www
+# Usage: - data_dump.rb [year]
+
+scope = ARGV[0]
+#scope = 2013
+
+def connect_to_www(scope)
 
   agent = Mechanize.new do |agent| 
     agent.log = Logger.new(STDOUT)
@@ -18,7 +23,7 @@ def connect_to_www
   search_form.add_field!("__EVENTARGUMENT")
   search_form.add_field!("__LASTFOCUS")
   search_form.add_field!("btnSearch", "Search")
-  search_form.cbRace = 94
+  search_form.cbRace = scope - 1919
   search_form.cbEvent = 1
   
   page = agent.submit(search_form).search('#grdResults').search('table')
@@ -36,4 +41,13 @@ def connect_to_www
   end
 end
 
-connect_to_www
+if scope.nil?
+  time = Time.new
+  start = 1921
+  finish = p time.year
+  for i in start..finish
+    connect_to_www(i)
+  end
+else
+  conenct_to_www(scope)
+end
