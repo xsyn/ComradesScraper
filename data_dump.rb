@@ -23,7 +23,7 @@ def connect_to_www(scope)
   search_form.add_field!("__EVENTARGUMENT")
   search_form.add_field!("__LASTFOCUS")
   search_form.add_field!("btnSearch", "Search")
-  search_form.cbRace = scope - 1919
+  search_form.cbRace = (scope.to_i - 1919)
   search_form.cbEvent = 1
   
   page = agent.submit(search_form).search('#grdResults').search('table')
@@ -36,6 +36,9 @@ def connect_to_www(scope)
       tr.search('td').each do |td|
         textA = textArray.push(td.text.delete("\n").delete("\r").delete("\t"))
       end
+      #result = '{"year" : "' + textA[0] + '", "position" : "' + textA[1] + '"}'
+      # Year  Pos Race No First Name  Last Name Gun Time  Category  Cat Pos Gender  Gen Pos Medal Status  Medals  Video
+      #p result
       result = tdArray.push(textA.join(','))
     end
   end
@@ -49,5 +52,5 @@ if scope.nil?
     connect_to_www(i)
   end
 else
-  conenct_to_www(scope)
+  connect_to_www(scope)
 end
