@@ -2,6 +2,8 @@
 require 'rubygems'
 require 'mechanize'
 require 'logger'
+require 'fastest-csv'
+require 'json'
 
 # Usage: - data_dump.rb [year]
 
@@ -28,18 +30,40 @@ def connect_to_www(scope)
   
   page = agent.submit(search_form).search('#grdResults').search('table')
   page.each do |rows|
-    tdArray = Array.new
     result = Array.new
     rows.search('tr').each do |tr|
       textA = Array.new
-      textArray = Array.new
       tr.search('td').each do |td|
-        textA = textArray.push(td.text.delete("\n").delete("\r").delete("\t"))
+        textA.push(td.text.delete("\n").delete("\r").delete("\t"))
+        #td.link.each_with_index do |x, i|
+        #  if i == 0
+        #    individual = agent.click(link) 
+        #    p individual
+        #  end
+        #end
       end
-      #result = '{"year" : "' + textA[0] + '", "position" : "' + textA[1] + '"}'
+      # First result returns nil for some reason
+      if textA[1].nil?
+        next
+      end
+      # Need to remove escaping backslashes that are input for inverted comma's
       # Year  Pos Race No First Name  Last Name Gun Time  Category  Cat Pos Gender  Gen Pos Medal Status  Medals  Video
-      #p result
-      result = tdArray.push(textA.join(','))
+      result.push("{'year' : '" + textA[0] +
+          "', 'position' : '" + textA[1] +
+          ", 'race_no' : '" + textA[2] +
+          "', 'first' : '" + textA[3] +
+          "', 'last' : '" + textA[4] +
+          "', 'time' : '" + textA[5] +
+          "', 'category' : '" + textA[6] +
+          "', 'category_pos' : '" + textA[7] +
+          "', 'gender' : '" + textA[8] +
+          "', 'gender_pos' : '" + textA[9] +
+          "', 'medal' : '" + textA[10] +
+          "', 'status' : '" + textA[11] +
+          "', 'medals' : '" + textA[12] +
+          "}")
+      #result = tdArray.push(textA.join(','))
+      #FastestCSV.parse(result).to_json
     end
   end
 end
