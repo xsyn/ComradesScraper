@@ -35,6 +35,7 @@ def connect_to_www(scope)
       textA = Array.new
       tr.search('td').each do |td|
         textA.push(td.text.delete("\n").delete("\r").delete("\t"))
+
         #td.link.each_with_index do |x, i|
         #  if i == 0
         #    individual = agent.click(link) 
@@ -46,7 +47,6 @@ def connect_to_www(scope)
       if textA[1].nil?
         next
       end
-      # Need to remove escaping backslashes that are input for inverted comma's
       # Year  Pos Race No First Name  Last Name Gun Time  Category  Cat Pos Gender  Gen Pos Medal Status  Medals  Video
       result.push("{'year' : '" + textA[0] +
           "', 'position' : '" + textA[1] +
@@ -62,8 +62,6 @@ def connect_to_www(scope)
           "', 'status' : '" + textA[11] +
           "', 'medals' : '" + textA[12] +
           "}")
-      #result = tdArray.push(textA.join(','))
-      #FastestCSV.parse(result).to_json
     end
   end
 end
