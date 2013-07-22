@@ -2,13 +2,13 @@
 require 'rubygems'
 require 'mechanize'
 require 'logger'
-require 'fastest-csv'
+#require 'fastest-csv'
 require 'json'
 
 # Usage: - data_dump.rb [year]
 
-scope = ARGV[0]
-#scope = 2013
+#scope = ARGV[0]
+scope = 2013
 
 def connect_to_www(scope)
 
@@ -35,7 +35,11 @@ def connect_to_www(scope)
       textA = Array.new
       tr.search('td').each do |td|
         textA.push(td.text.delete("\n").delete("\r").delete("\t"))
-
+        td.search('font').each do |f|
+          f.search('a').each do |a|
+            p a["href"]
+          end
+        end
         #td.link.each_with_index do |x, i|
         #  if i == 0
         #    individual = agent.click(link) 
