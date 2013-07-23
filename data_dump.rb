@@ -28,7 +28,7 @@ def connect_to_www(scope)
   search_form.cbRace = (scope.to_i - 1919)
   search_form.cbEvent = 1
 
-  CSV.open("report.csv", "w") do |csv|
+  CSV.open("results.csv", "w") do |csv|
     page = agent.submit(search_form).search('#grdResults').search('table')
     page.each do |rows|
       result = Array.new
@@ -59,14 +59,14 @@ def connect_to_www(scope)
           #Position, runnerid, time, category, status, splits 1 - 5
           result[0] = textA[1]
           result[1] = textA[2]
-          result[3] = textA[11]
-          result[4] = textA[12]
-          result[5] = textA[15]
-          result[6] = textA[4][1]
-          result[7] = textA[5][1]
-          result[8] = textA[6][1]
-          result[9] = textA[7][1]
-          result[10] = textA[8][1]
+          result[2] = textA[11]
+          result[3] = textA[12]
+          result[4] = textA[16]
+          result[5] = textA[4][1]
+          result[6] = textA[5][1]
+          result[7] = textA[6][1]
+          result[8] = textA[7][1]
+          result[9] = textA[8][1]
 
           csv << result
           #newresult.push(result.join(','))
